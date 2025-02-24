@@ -4,7 +4,7 @@ import { MatCardModule } from "@angular/material/card";
 
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from "@angular/router";
-import { ApiService } from "../api.service";
+import { ApiService } from "../util/api.service";
 
 @Component({
   selector: 'app-login',

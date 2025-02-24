@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PersonCardComponent } from '../person-card/person-card.component';
-import { ApiService } from '../api.service';
+import { ApiService } from '../util/api.service';
 
 @Component({
   selector: 'app-home',

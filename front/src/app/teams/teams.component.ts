@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { NgFor } from '@angular/common';
-import { KeysPipe } from "../keys.pipe";
+import { KeysPipe } from "../util/keys.pipe";
 import { PersonCardComponent } from '../person-card/person-card.component';
-import { ApiService } from '../api.service';
+import { ApiService } from '../util/api.service';
 
 @Component({
   selector: 'app-teams',
