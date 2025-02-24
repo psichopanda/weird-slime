@@ -1,0 +1,41 @@
+{
+  "name": "weird-slime",
+  "version": "1.0.0",
+  "description": "ciandt scope project",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest",
+    "build": "cd front && ng build && cpx dist/front/* ../public/",
+    "start": "npm run build && ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/app.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/psichopanda/weird-slime.git"
+  },
+  "author": "Alvaro P. Filho",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/psichopanda/weird-slime/issues"
+  },
+  "homepage": "https://github.com/psichopanda/weird-slime#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/express-session": "^1.18.1",
+    "@types/passport": "^1.0.17",
+    "cpx2": "^8.0.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@google-cloud/local-auth": "^2.1.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "google-auth-library": "^9.15.1",
+    "googleapis": "^105.0.0",
+    "mongodb": "6.13",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-google-oidc": "^0.1.0"
+  }
+}

@@ -1,0 +1,13 @@
+<div class="card-container" >
+    <mat-card *ngFor="let engagement of engagements | keys" class="card-container">
+        <mat-card-content >
+            <mat-card-title>{{ engagement.key }}</mat-card-title>
+            <mat-card *ngFor="let team of engagement.value | keys" class="card-container">
+                <mat-card-content>
+                    <mat-card-title>{{ team.key }}</mat-card-title>
+                    <person-card [people]="team.value" class="card-container" ></person-card>
+                </mat-card-content>
+            </mat-card>
+        </mat-card-content>
+    </mat-card>
+</div>

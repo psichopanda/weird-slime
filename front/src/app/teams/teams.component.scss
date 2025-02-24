@@ -1,0 +1,19 @@
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 1em;
+}
+
+mat-card-title {
+    margin-bottom: 0.5em;
+}
+
+mat-card { 
+    border-style: solid;
+    outline-style: none;
+    border-width: 1px;
+    border-color: black;
+    box-shadow: none;
+    background-color: white;
+}
