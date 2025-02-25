@@ -17,26 +17,52 @@ export class ApiService {
     let a = this.http.get(encodeURI(url), {
       headers: { Authorization: `Bearer ${accessToken}` },
     })
-    await new Promise<void>((res) => {
+    await new Promise<void>((resolve) => {
       a.subscribe(async (data: any) => {
+        console.log("data retrieved")
         await this.savePeople(this.transformSheetsData(data.values))
-        res()
+        resolve()
       })
     })
   }
 
+  async savePicture(email: string, picture: string){
+    return new Promise<void>((resolve, rej) => {
+      try{
+        this.http.post("api/save-picture", { email, picture }).subscribe(data => {
+          resolve()
+        })
+      }catch(e){
+        console.error(`saving picture error: ${e}`)
+        rej()
+      }
+    })
+  }
+
+  async getPerson(email: string){
+    return new Promise<any>((resolve, rej) => {
+      try{
+        this.http.get(`api/person/${email}`).subscribe(data => {
+          resolve(data)
+        })
+      }catch(e){
+        console.error(`saving people error: ${e}`)
+        rej(e)
+      }
+    })
+  }
+
   async savePeople(people: any){
-    return new Promise<void>((res, rej) => {
+    return new Promise<void>((resolve, rej) => {
       try{
         this.http.post("api/people", people).subscribe(data => {
-          res()
+          resolve()
         })
       }catch(e){
         console.error(`saving people error: ${e}`)
         rej()
       }
     })
-    
   }
 
   async getPeople(){

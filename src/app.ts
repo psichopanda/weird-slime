@@ -23,9 +23,18 @@ app.post('/api/people', async (req: any, res) => {
     req.db.collection('people').insertMany(req.body)
     res.json( { success: true } )
 })
+app.post('/api/save-picture', async (req: any, res) => {
+    const { email, picture } = req.body
+    req.db.collection('people').updateOne({ 'Email CI&T': email }, { $set: { picture } } )
+    res.json( { success: true } )
+})
 app.get('/api/people', async (req: any, res) => {
     let cursor = await req.db.collection('people').find()
     res.json(await cursor.toArray())
+})
+app.get('/api/person/:id', async (req: any, res) => {
+    let person = await req.db.collection('people').findOne({'Email CI&T': req.params.id})
+    res.json(person)
 })
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/browser/index.html'));

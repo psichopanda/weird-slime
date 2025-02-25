@@ -22,6 +22,7 @@ export class LoginComponent{
 
   async getAccessToken(){
     let accessToken
+    this.authService.authState.subscribe(data => console.log(data))
     if(!accessToken){
       accessToken = await this.authService.getAccessToken(GoogleLoginProvider.PROVIDER_ID)
     }
