@@ -1,0 +1,19 @@
+@for (engagement of engagement; track engagement; let f = $first) {
+  <p-fieldset [legend]="engagement.name">
+    <p>
+        @for (team of engagement.teams; track team) {
+          <p-panel [header]="team.name">
+            <p class="grid">
+                @for (people of team.people; track people) {
+                  @defer (on viewport) {
+                    <app-dasboard-card class="mx-2 scalein animation-duration-1000" [ngClass]="{'scalein animation-duration-1000': f}" [people]="people" [showAnimation]="f"></app-dasboard-card>
+                  } @placeholder {
+                    <p>Carregando...</p>
+                  }
+                }
+            </p>
+        </p-panel>
+        }
+    </p>
+  </p-fieldset>
+}

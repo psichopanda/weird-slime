@@ -1,0 +1,10 @@
+<p-card class="col" [header]="people()?.name">
+  <ng-template class="flex justify-content-center" #header>
+    <img alt="Card" class="md:bg-contain bg-center bg-no-repeat border-round h-10rem w-10rem" [src]="people()?.picture ?? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'"/>
+  </ng-template>
+
+  <ng-template #title> {{people()?.name | slice: 0 : 20}} </ng-template>
+
+  <ng-template #subtitle>{{people()?.login}}</ng-template>
+  <ng-template #subtitle>{{people()?.primary_skills}} </ng-template>
+</p-card>
