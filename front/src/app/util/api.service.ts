@@ -79,12 +79,15 @@ export class ApiService {
   }
 
   private transformSheetsData(sheetsData: any){
+    let allowedFields: string[] = ['Name', 'Start Date', 'Engagement', 
+      'Team', 'Email CI&T', 'Login', 'Primary Skills', 'First Name']
     let people:any = []
     for(let l=4; l<sheetsData.length; l++){
       let person: any = {}
       if(l == 4) continue;
       for(let c=0; c<sheetsData[l].length; c++){
-        person[sheetsData[4][c]] = sheetsData[l][c]
+        if(allowedFields.includes(sheetsData[4][c]))
+          person[sheetsData[4][c]] = sheetsData[l][c]
       }
       people.push(person)
     }
