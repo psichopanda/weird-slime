@@ -10,7 +10,6 @@ export class NamePipe implements PipeTransform {
       return '';
     }
     value = value.replace('do', '').replace('da', '').replace('dos', '').replace('de', '').replace('  ', ' ');
-    console.log(value)
     return value.split(' ').slice(0, 2).join(' ');
   }
 
