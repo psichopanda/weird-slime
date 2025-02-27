@@ -9,13 +9,17 @@ import { FluidModule } from 'primeng/fluid';
 import { DataViewModule } from 'primeng/dataview';
 import { DasboardCardComponent } from "../dasboard-card/dasboard-card.component";
 import { ScrollerModule } from 'primeng/scroller';
-import { interval } from 'rxjs';
+import { interval, map, takeWhile } from 'rxjs';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
+import { UtilService } from '../../../core/services/util.service';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { FormsModule } from '@angular/forms';
+import { TeamInterface } from '../../../core/interfaces/team.interface';
 
 @Component({
   selector: 'app-dashboard-home',
-  imports: [ButtonModule, CardModule, FieldsetModule, PanelModule, FluidModule, DataViewModule, DasboardCardComponent, ScrollerModule, AvatarModule, AvatarGroupModule],
+  imports: [ButtonModule, CardModule, FieldsetModule, PanelModule, FluidModule, DataViewModule, DasboardCardComponent, ScrollerModule, AvatarModule, AvatarGroupModule, RadioButtonModule, FormsModule],
   templateUrl: './dashboard-home.component.html',
   styleUrl: './dashboard-home.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -23,45 +27,34 @@ import { AvatarGroupModule } from 'primeng/avatargroup';
 export class DashboardHomeComponent implements OnInit {
 
   public engagement!: EngagementInterface[];
+  public teams!: TeamInterface[];
+  public vision: string = 'team';
+
   private peopleService: PeopleService = inject(PeopleService);
+  private utilService: UtilService = inject(UtilService);
 
   ngOnInit(): void {
-    this.peopleService.listAll().subscribe(res => {
-      this.engagement = res;
-    });
-
-    /**
-     * TODO Rotacionar times dentro do engagement
-     */
-    interval(10000).subscribe(() => {
-      // @ts-ignore
-      this.engagement.push(this.engagement.shift());
-    });
+    this.loadPeople();
   }
 
-  // async rotateTeams(engagementIndex: number): Promise<any> {
-  //   return await new Promise((resolve) => {
-  //     for (let i = 0; i <= 2; i++) {
-  //       interval(5000).subscribe(async x => {
-  //         console.log(this.engagement[engagementIndex].teams[i])
-  //         this.engagement[engagementIndex].teams.push(this.engagement[engagementIndex].teams.shift());
-  //         await timeout(1500);
-  //       })
-  //     }
-  //     console.log('')
-  //     resolve(true);
-  //   });
-  // }
+  loadPeople(): void {
+    console.log(this.vision)
+    this.peopleService.listAll().pipe(map(item => this.vision === 'engagement' ? this.utilService.transformPeopleToEngament(item) : this.utilService.transformPeopleToTeam(item))).subscribe((res: any) => {
+      if (this.vision === 'team') {
+        this.teams = res;
+        interval(5000).pipe(takeWhile(() => this.vision === 'team')).subscribe(() => {
+          // @ts-ignore
+          this.teams.push(this.teams.shift());
+        });
+      }
 
-  // async waitUntil(condition: boolean) {
-  //   console.log('started')
-  //   return await new Promise(resolve => {
-  //     const interval = setInterval(() => {
-  //       if (condition) {
-  //         resolve('foo');
-  //         clearInterval(interval);
-  //       };
-  //     }, 1000);
-  //   });
-  // }
+      if (this.vision === 'engagement') {
+        this.engagement = res;
+        interval(5000).pipe(takeWhile(() => this.vision === 'engagement')).subscribe(() => {
+          // @ts-ignore
+          this.engagement.push(this.engagement.shift());
+        });
+      }
+    });
+  }
 }

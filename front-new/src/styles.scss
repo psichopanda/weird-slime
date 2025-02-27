@@ -19,6 +19,10 @@ body .p-component
   color: #fa5a50;
 }
 
+.p-card-title {
+  font-size: 16px !important;
+}
+
 .p-toolbar {
   background-color: #fa5a50 !important;
 }
@@ -36,10 +40,10 @@ body .p-component
 }
 
 .p-card {
-  height: 370px;
+  height: 330px;
   width: 190px;
 }
 
 .p-card-title {
-  height: 50px;
+  height: 40px;
 }

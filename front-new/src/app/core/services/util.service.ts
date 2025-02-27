@@ -2,7 +2,7 @@ import { EngagementInterface } from '../interfaces/engagement-interface';
 import { TeamInterface } from '../interfaces/team.interface';
 import { PeopleInterface } from './../interfaces/people.interface';
 import { Injectable } from '@angular/core';
-import { groupBy, filter } from 'lodash'
+import { groupBy, filter, forEach } from 'lodash'
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +18,22 @@ export class UtilService {
         });
       }
     });
-
     return engagements;
+  }
+
+  public transformPeopleToTeam(people: PeopleInterface[]): TeamInterface[] {
+    const teams = new Array<TeamInterface>();
+    const filteredPeople = groupBy(people, 'team');
+    console.log(filteredPeople);
+
+    for(let key of Object.keys(filteredPeople)) {
+      teams.push({
+        name: key,
+        people: filteredPeople[key]
+      });
+    }
+
+    return teams;
   }
 
   private filterTeam(people: PeopleInterface[], engagement: string) {
