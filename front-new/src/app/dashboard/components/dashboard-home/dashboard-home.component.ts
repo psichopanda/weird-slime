@@ -29,7 +29,7 @@ export class DashboardHomeComponent implements OnInit {
     });
 
     // @ts-ignore
-    interval(5000).subscribe(x => this.engagement.push(this.engagement.shift()));
+    // interval(5000).subscribe(x => this.engagement.push(this.engagement.shift()));
   }
 
 

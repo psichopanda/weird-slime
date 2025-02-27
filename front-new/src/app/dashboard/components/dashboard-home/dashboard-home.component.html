@@ -1,19 +1,19 @@
-@for (engagement of engagement; track engagement; let f = $first) {
-  <p-fieldset [legend]="engagement.name">
-    <p>
-        @for (team of engagement.teams; track team) {
-          <p-panel [header]="team.name">
-            <p class="grid">
-                @for (people of team.people; track people) {
-                  @defer (on viewport) {
-                    <app-dasboard-card class="mx-2 scalein animation-duration-1000" [ngClass]="{'scalein animation-duration-1000': f}" [people]="people" [showAnimation]="f"></app-dasboard-card>
-                  } @placeholder {
-                    <p>Carregando...</p>
-                  }
+<div class="m-1">
+  @for (engagement of engagement; track engagement; let f = $first) {
+    <p-fieldset [legend]="engagement.name">
+      @for (team of engagement.teams; track team) {
+        <p-panel class="my-2" [header]="team.name">
+          <p class="grid flex">
+              @for (people of team.people; track people) {
+                @defer (on viewport) {
+                  <app-dasboard-card class="mx-2 fadeinleft animation-duration-2000 flex-initial flex align-items-center justify-content-center font-bold border-round" [ngClass]="{'scalein animation-duration-1000': f}" [people]="people" [showAnimation]="f"></app-dasboard-card>
+                } @placeholder {
+                  <p>Carregando...</p>
                 }
-            </p>
-        </p-panel>
-        }
-    </p>
-  </p-fieldset>
-}
+              }
+          </p>
+      </p-panel>
+      }
+    </p-fieldset>
+  }
+</div>

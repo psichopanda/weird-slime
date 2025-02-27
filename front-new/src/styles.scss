@@ -5,3 +5,32 @@ body .p-component
   margin: 0;
   font-family: "Open Sans", sans-serif;
 }
+
+.p-card-header {
+  display: flex;
+  place-content: center;
+}
+
+.primary-text-ciandt {
+  color: #fa5a50;
+}
+
+.p-card-title, .p-fieldset-legend-label {
+  color: #fa5a50;
+}
+
+.p-toolbar {
+  background-color: #fa5a50 !important;
+}
+
+.p-fieldset-legend-label {
+  font-size: 2em;
+}
+
+.p-panel-title {
+  color: #000050 !important;
+}
+
+.p-panel-title {
+  font-size: 1.4em;
+}
