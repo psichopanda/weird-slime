@@ -5,8 +5,11 @@
   "main": "app.js",
   "scripts": {
     "test": "jest",
-    "build": "cd front && ng build && cpx dist/front/* ../public/",
-    "start": "npm run build && ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/app.ts"
+    "build": "cd front && npm run build && cpx -u dist/front/**/* ../public/",
+    "build-new": "cd front-new && npm run build && cpx -u dist/front-new/**/* ../public/",
+    "start-new": "npm run build-new && npm run start-node",
+    "start": "npm run build && npm run start-node",
+    "start-node": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/app.ts"
   },
   "repository": {
     "type": "git",
