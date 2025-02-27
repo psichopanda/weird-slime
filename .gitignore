@@ -1,8 +1,8 @@
+# Allow
+!public/browser/default-avatar.jpg
+
 # Ignore
 node_modules
 dist
 .env
 public/**/*
-
-# Allow
-!public/browser/default-avatar.jpg
