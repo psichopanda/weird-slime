@@ -14,7 +14,7 @@ export class PeopleService {
   private utilService: UtilService = inject(UtilService);
   private http: HttpClient = inject(HttpClient);
 
-  listAll(): Observable<EngagementInterface[]> {
+  listAll(): Observable<PeopleInterface[]> {
     return this.http.get<PeopleInterfaceDTO[]>(`${environment.url}/api/people`).pipe(
       map(res => {
         const people = new Array<PeopleInterface>;
@@ -33,8 +33,7 @@ export class PeopleService {
           });
         });
         return people;
-      }),
-      map(item => this.utilService.transformPeopleToEngament(item))
+      })
     );
   }
 
