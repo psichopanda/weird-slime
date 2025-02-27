@@ -5,6 +5,12 @@
 
   <ng-template #title> {{people()?.name | name}} </ng-template>
 
-  <ng-template #subtitle>{{people()?.login}}</ng-template>
-  <ng-template #subtitle>{{people()?.primary_skills}} </ng-template>
+  <ng-template #subtitle>
+    <p>{{people()?.login}}</p>
+    <p style="font-size: 12px;">{{people()?.primary_skills}}</p>
+  </ng-template>
+
+  <ng-template #footer>
+    <p-progressbar [value]="100" />
+  </ng-template>
 </p-card>
