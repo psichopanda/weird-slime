@@ -51,24 +51,24 @@ export class DashboardHomeComponent implements OnInit {
 
   private peopleService: PeopleService = inject(PeopleService);
   private utilService: UtilService = inject(UtilService);
+  private transitionTime: number = 20000;
 
   ngOnInit(): void {
     this.loadPeople();
   }
 
   loadPeople(): void {
-    console.log(this.vision)
     this.peopleService.listAll().pipe(map(item => this.vision === 'engagement' ? this.utilService.transformPeopleToEngament(item) : this.utilService.transformPeopleToTeam(item))).subscribe((res: any) => {
       if (this.vision === 'team') {
         this.teams = res;
-        interval(30000).pipe(takeWhile(() => this.vision === 'team')).subscribe(() => {
+        interval(this.transitionTime).pipe(takeWhile(() => this.vision === 'team')).subscribe(() => {
           this.teams.push(<TeamInterface>this.teams.shift());
         });
       }
 
       if (this.vision === 'engagement') {
         this.engagement = res;
-        interval(30000).pipe(takeWhile(() => this.vision === 'engagement')).subscribe(() => {
+        interval(this.transitionTime).pipe(takeWhile(() => this.vision === 'engagement')).subscribe(() => {
           this.engagement.push(<EngagementInterface>this.engagement.shift());
         });
       }

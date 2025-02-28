@@ -29,7 +29,8 @@ export class PeopleService {
             picture: element.picture,
             primary_skills: element['Primary Skills'],
             start_date: new Date(element['Start Date']),
-            team: element.Team
+            team: element.Team,
+            profile_completion: this.getRandomInt(1, 100)
           });
         });
         return people;
@@ -43,5 +44,11 @@ export class PeopleService {
 
   getById(id: number): Observable<any> {
     return this.http.get(`${environment.url}/api/person/${id}`);
+  }
+
+  private getRandomInt(min: number, max: number): number {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 }
