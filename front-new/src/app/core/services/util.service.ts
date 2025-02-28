@@ -24,15 +24,12 @@ export class UtilService {
   public transformPeopleToTeam(people: PeopleInterface[]): TeamInterface[] {
     const teams = new Array<TeamInterface>();
     const filteredPeople = groupBy(people, 'team');
-    console.log(filteredPeople);
-
     for(let key of Object.keys(filteredPeople)) {
       teams.push({
         name: key,
         people: filteredPeople[key]
       });
     }
-
     return teams;
   }
 
@@ -47,9 +44,5 @@ export class UtilService {
       });
     }
     return teams;
-  }
-
-  groupByKey(list: any[], key:string): any {
-    return list.reduce((hash, obj) => ({...hash, [obj[key]]:( hash[obj[key]] || [] ).concat(obj)}), {})
   }
 }

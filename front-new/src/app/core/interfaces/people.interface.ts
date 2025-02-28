@@ -9,6 +9,7 @@ export interface PeopleInterface {
   primary_skills: string;
   start_date: Date;
   team: string;
+  profile_completion: number
 }
 
 export interface PeopleInterfaceDTO {

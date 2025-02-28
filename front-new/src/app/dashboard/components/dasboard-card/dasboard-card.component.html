@@ -1,16 +1,16 @@
-<p-card class="col" [header]="people()?.name">
+<p-card class="col border" [header]="people()?.name">
   <ng-template class="flex justify-content-center" #header>
-    <img alt="Card" class="md:bg-contain bg-center bg-no-repeat border-round h-10rem w-10rem shadow-1 mt-2" [src]="people()?.picture ?? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'"/>
+    <img alt="Card" class="md:bg-contain bg-center bg-no-repeat border-round h-10rem w-10rem shadow-1 mt-2" (click)="openProfile(people())" [src]="people()?.picture ?? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'"/>
   </ng-template>
 
   <ng-template #title> {{people()?.name | name}} </ng-template>
 
   <ng-template #subtitle>
-    <p class="m-1">{{people()?.login}}</p>
-    <p class="m-1" style="font-size: 12px;">{{people()?.primary_skills}}</p>
+    <p class="my-1">{{people()?.login ? people()?.login : '-'}}</p>
+    <p class="m-0 count-characters text-bold" [pTooltip]="people()?.primary_skills" style="font-size: 12px;">{{people()?.primary_skills}}</p>
   </ng-template>
 
   <ng-template #footer>
-    <p-progressbar [value]="100" />
+    <p-progressbar [value]="people()?.profile_completion" />
   </ng-template>
 </p-card>
