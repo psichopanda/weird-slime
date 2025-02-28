@@ -9,6 +9,11 @@
         <p-radiobutton name="pizza" value="engagement" [(ngModel)]="vision" inputId="ingredient2" (ngModelChange)="loadPeople()" />
         <label class="ml-2">Engagement</label>
     </div>
+
+    <div class="card flex justify-center">
+      <label class="mx-2">Rotate Teams</label>
+      <p-toggleswitch [(ngModel)]="rotateTeams" (ngModelChange)="toggleRotateTeams()" />
+    </div>
   </div>
 
   @if (vision === 'engagement') {

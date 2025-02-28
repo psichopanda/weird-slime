@@ -16,11 +16,26 @@ import { UtilService } from '../../../core/services/util.service';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormsModule } from '@angular/forms';
 import { TeamInterface } from '../../../core/interfaces/team.interface';
-import { animate, keyframes, query, stagger, state, style, transition, trigger } from '@angular/animations';
+import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 @Component({
   selector: 'app-dashboard-home',
-  imports: [ButtonModule, CardModule, FieldsetModule, PanelModule, FluidModule, DataViewModule, DasboardCardComponent, ScrollerModule, AvatarModule, AvatarGroupModule, RadioButtonModule, FormsModule],
+  imports: [
+    ButtonModule,
+    CardModule,
+    FieldsetModule,
+    PanelModule,
+    FluidModule,
+    DataViewModule,
+    DasboardCardComponent,
+    ScrollerModule,
+    AvatarModule,
+    AvatarGroupModule,
+    RadioButtonModule,
+    FormsModule,
+    ToggleSwitchModule
+  ],
   templateUrl: './dashboard-home.component.html',
   styleUrl: './dashboard-home.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -48,30 +63,39 @@ export class DashboardHomeComponent implements OnInit {
   public engagement!: EngagementInterface[];
   public teams!: TeamInterface[];
   public vision: string = 'team';
+  public rotateTeams: boolean = true;
 
   private peopleService: PeopleService = inject(PeopleService);
   private utilService: UtilService = inject(UtilService);
-  private transitionTime: number = 20000;
+  private transitionTime: number = 15000;
 
   ngOnInit(): void {
     this.loadPeople();
+    this.toggleRotateTeams();
   }
 
   loadPeople(): void {
     this.peopleService.listAll().pipe(map(item => this.vision === 'engagement' ? this.utilService.transformPeopleToEngament(item) : this.utilService.transformPeopleToTeam(item))).subscribe((res: any) => {
       if (this.vision === 'team') {
         this.teams = res;
-        interval(this.transitionTime).pipe(takeWhile(() => this.vision === 'team')).subscribe(() => {
-          this.teams.push(<TeamInterface>this.teams.shift());
-        });
       }
-
       if (this.vision === 'engagement') {
         this.engagement = res;
-        interval(this.transitionTime).pipe(takeWhile(() => this.vision === 'engagement')).subscribe(() => {
-          this.engagement.push(<EngagementInterface>this.engagement.shift());
-        });
       }
     });
+  }
+
+  toggleRotateTeams(): void {
+    if (this.vision === 'team') {
+      interval(this.transitionTime).pipe(takeWhile(() => this.vision === 'team' && this.rotateTeams)).subscribe(() => {
+        this.teams.push(<TeamInterface>this.teams.shift());
+      });
+    }
+
+    if (this.vision === 'engagement') {
+      interval(this.transitionTime).pipe(takeWhile(() => this.vision === 'engagement' && this.rotateTeams)).subscribe(() => {
+        this.engagement.push(<EngagementInterface>this.engagement.shift());
+      });
+    }
   }
 }
