@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 import { TeamInterface } from '../../../core/interfaces/team.interface';
 import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-dashboard-home',
@@ -59,9 +60,10 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
   ]
 })
 export class DashboardHomeComponent implements OnInit {
+  @BlockUI() blockUI: NgBlockUI;
 
-  public engagement!: EngagementInterface[];
-  public teams!: TeamInterface[];
+  public engagement: EngagementInterface[];
+  public teams: TeamInterface[];
   public vision: string = 'team';
   public rotateTeams: boolean = true;
 
@@ -75,13 +77,19 @@ export class DashboardHomeComponent implements OnInit {
   }
 
   loadPeople(): void {
-    this.peopleService.listAll().pipe(map(item => this.vision === 'engagement' ? this.utilService.transformPeopleToEngament(item) : this.utilService.transformPeopleToTeam(item))).subscribe((res: any) => {
+    this.blockUI.start();
+    this.peopleService.listAll().pipe(map(item => this.vision === 'engagement' ? this.utilService.transformPeopleToEngament(item) : this.utilService.transformPeopleToTeam(item)))
+      .subscribe((res: any) => {
       if (this.vision === 'team') {
         this.teams = res;
       }
       if (this.vision === 'engagement') {
         this.engagement = res;
       }
+    }).add(() => {
+      setTimeout(() => {
+        this.blockUI.stop()
+      }, 2000)
     });
   }
 
