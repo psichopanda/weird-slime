@@ -7,7 +7,7 @@
 
   <ng-template #subtitle>
     <p class="my-1">{{people()?.login ? people()?.login : '-'}}</p>
-    <p class="m-0 count-characters text-bold" style="font-size: 12px;">{{people()?.primary_skills}}</p>
+    <p class="m-0 count-characters text-bold" [pTooltip]="people()?.primary_skills" style="font-size: 12px;">{{people()?.primary_skills}}</p>
   </ng-template>
 
   <ng-template #footer>
