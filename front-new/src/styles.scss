@@ -3,7 +3,8 @@ body,
 body .p-component
 {
   margin: 0;
-  font-family: "Open Sans", sans-serif;
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
 }
 
 .p-card-header {
@@ -12,6 +13,10 @@ body .p-component
 }
 
 .primary-text-ciandt {
+  color: #fa5a50;
+}
+
+.primary-subtext-ciandt {
   color: #fa5a50;
 }
 

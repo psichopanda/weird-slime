@@ -42,18 +42,16 @@ export class DashboardHomeComponent implements OnInit {
     this.peopleService.listAll().pipe(map(item => this.vision === 'engagement' ? this.utilService.transformPeopleToEngament(item) : this.utilService.transformPeopleToTeam(item))).subscribe((res: any) => {
       if (this.vision === 'team') {
         this.teams = res;
-        interval(5000).pipe(takeWhile(() => this.vision === 'team')).subscribe(() => {
-          // @ts-ignore
-          this.teams.push(this.teams.shift());
-        });
+        // interval(5000).pipe(takeWhile(() => this.vision === 'team')).subscribe(() => {
+        //   this.teams.push(<TeamInterface>this.teams.shift());
+        // });
       }
 
       if (this.vision === 'engagement') {
         this.engagement = res;
-        interval(5000).pipe(takeWhile(() => this.vision === 'engagement')).subscribe(() => {
-          // @ts-ignore
-          this.engagement.push(this.engagement.shift());
-        });
+        // interval(5000).pipe(takeWhile(() => this.vision === 'engagement')).subscribe(() => {
+        //   this.engagement.push(<EngagementInterface>this.engagement.shift());
+        // });
       }
     });
   }
