@@ -1,18 +1,18 @@
 <div class="m-2">
   <div class="flex flex-wrap gap-4 end py-2" style="place-content: center;">
     <div class="flex items-center">
-        <p-radiobutton name="pizza" value="team" [(ngModel)]="vision" inputId="ingredient1" (ngModelChange)="loadPeople()" />
-        <label for="ingredient1" class="ml-2">Team</label>
+        <p-radiobutton name="team" value="team" [(ngModel)]="vision" inputId="team" (ngModelChange)="loadPeople()" />
+        <label class="ml-2">Team</label>
     </div>
 
     <div class="flex items-center">
         <p-radiobutton name="pizza" value="engagement" [(ngModel)]="vision" inputId="ingredient2" (ngModelChange)="loadPeople()" />
-        <label for="ingredient2" class="ml-2">Engagement</label>
+        <label class="ml-2">Engagement</label>
     </div>
   </div>
 
   @if (vision === 'engagement') {
-    @for (engagement of engagement; track engagement; let f = $first) {
+    @for (engagement of engagement; track engagement;) {
       <p-fieldset>
         <ng-template #header>
           <div class="flex items-center gap-2 px-2">
@@ -22,13 +22,13 @@
               <span class="font-bold p-fieldset-legend-label">{{engagement.name}}</span>
           </div>
         </ng-template>
-  
+
         @for (team of engagement.teams; track team) {
           <p-panel class="my-2" [header]="team.name">
             <p class="grid flex">
                 @for (people of team.people; track people) {
                   @defer (on viewport) {
-                    <app-dasboard-card class="mx-2 fadeinleft animation-duration-2000 flex-initial flex align-items-center justify-content-center font-bold" [ngClass]="{'fadeinleft animation-duration-1000': f}" [people]="people"></app-dasboard-card>
+                    <app-dasboard-card [@animation]="team.people" class="mx-2 flex-initial flex align-items-center justify-content-center font-bold" [people]="people"></app-dasboard-card>
                   } @placeholder {
                     <p>Carregando...</p>
                   }
@@ -55,14 +55,14 @@
         <p class="grid flex">
             @for (people of team.people; track people) {
               @defer (on viewport) {
-                <app-dasboard-card class="mx-2 fadeinleft animation-duration-2000 flex-initial flex align-items-center justify-content-center font-bold" [ngClass]="{'fadeinleft animation-duration-1000': f}" [people]="people"></app-dasboard-card>
+                <app-dasboard-card [@animation]="team.people" class="mx-2 flex-initial flex align-items-center justify-content-center font-bold" [people]="people"></app-dasboard-card>
               } @placeholder {
                 <p>Carregando...</p>
               }
             }
         </p>
     </p-fieldset>
-    
+
     }
   }
 </div>
