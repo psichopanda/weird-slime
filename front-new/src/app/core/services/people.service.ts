@@ -1,17 +1,13 @@
-import { PeopleInterface, PeopleInterfaceDTO } from './../interfaces/people.interface';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { UtilService } from './util.service';
-import { EngagementInterface } from '../interfaces/engagement-interface';
+import { PeopleInterface, PeopleInterfaceDTO } from '../interfaces/people.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PeopleService {
-
-  private utilService: UtilService = inject(UtilService);
   private http: HttpClient = inject(HttpClient);
 
   listAll(): Observable<PeopleInterface[]> {

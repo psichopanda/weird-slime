@@ -1,22 +1,22 @@
 <div class="m-2">
   <div class="flex flex-wrap gap-4 end py-2" style="place-content: center;">
     <div class="flex items-center">
-        <p-radiobutton name="team" value="team" [(ngModel)]="vision" inputId="team" (ngModelChange)="loadPeople()" />
+        <p-radiobutton name="team" value="team" [(ngModel)]="vision().vision" inputId="team" (ngModelChange)="loadPeople()" />
         <label class="ml-2">Team</label>
     </div>
 
     <div class="flex items-center">
-        <p-radiobutton name="pizza" value="engagement" [(ngModel)]="vision" inputId="ingredient2" (ngModelChange)="loadPeople()" />
+        <p-radiobutton name="pizza" value="engagement" [(ngModel)]="vision().vision" inputId="ingredient2" (ngModelChange)="loadPeople()" />
         <label class="ml-2">Engagement</label>
     </div>
 
     <div class="card flex justify-center">
       <label class="mx-2">Rotate Teams</label>
-      <p-toggleswitch [(ngModel)]="rotateTeams" (ngModelChange)="toggleRotateTeams()" />
+      <p-toggleswitch [(ngModel)]="vision().rotate_teams" (ngModelChange)="toggleRotateTeams()" />
     </div>
   </div>
 
-  @if (vision === 'engagement') {
+  @if (vision().vision === 'engagement') {
     @for (engagement of engagement; track engagement;) {
       <p-fieldset>
         <ng-template #header>
@@ -45,7 +45,7 @@
     }
   }
 
-  @if (vision === 'team') {
+  @if (vision().vision === 'team') {
     @for (team of teams; track $index; ; let f = $first) {
       <p-fieldset>
         <ng-template #header>
@@ -67,7 +67,6 @@
             }
         </p>
     </p-fieldset>
-
     }
   }
 </div>

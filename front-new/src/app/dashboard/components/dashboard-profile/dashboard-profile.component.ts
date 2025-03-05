@@ -6,6 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { ProgressBar, ProgressBarModule } from 'primeng/progressbar';
 import { DatePickerModule } from 'primeng/datepicker';
+import { DividerModule } from 'primeng/divider';
 
 @Component({
   selector: 'app-dashboard-profile',
@@ -15,7 +16,8 @@ import { DatePickerModule } from 'primeng/datepicker';
     FormsModule,
     ProgressBar,
     ProgressBarModule,
-    DatePickerModule
+    DatePickerModule,
+    DividerModule
   ],
   templateUrl: './dashboard-profile.component.html',
   styleUrl: './dashboard-profile.component.scss'
