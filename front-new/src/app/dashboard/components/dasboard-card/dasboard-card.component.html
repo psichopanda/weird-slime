@@ -1,10 +1,17 @@
-<p-card class="col" [header]="people()?.name">
+<p-card class="col border" [header]="people()?.name">
   <ng-template class="flex justify-content-center" #header>
-    <img alt="Card" class="md:bg-contain bg-center bg-no-repeat border-round h-10rem w-10rem" [src]="people()?.picture ?? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'"/>
+    <img alt="Card" class="md:bg-contain bg-center bg-no-repeat border-round h-10rem w-10rem shadow-1 mt-2" 
+      [src]="people()?.badge_photo ?? people()?.picture ?? 'default-avatar.jpg'"/>
   </ng-template>
 
-  <ng-template #title> {{people()?.name | slice: 0 : 20}} </ng-template>
+  <ng-template #title> {{people()?.name | name}} </ng-template>
 
-  <ng-template #subtitle>{{people()?.login}}</ng-template>
-  <ng-template #subtitle>{{people()?.primary_skills}} </ng-template>
+  <ng-template #subtitle>
+    <p class="my-1">{{people()?.login ? people()?.login : '-'}}</p>
+    <p class="m-0 count-characters text-bold" [pTooltip]="people()?.primary_skills" style="font-size: 12px;">{{people()?.primary_skills}}</p>
+  </ng-template>
+
+  <ng-template #footer>
+    <p-progressbar [value]="people()?.profile_completion" />
+  </ng-template>
 </p-card>

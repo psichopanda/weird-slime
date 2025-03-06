@@ -1,0 +1,6 @@
+<p>admin works!</p>
+<button (click)="loadPeopleSpreadsheet()">sheets</button>
+
+<button (click)="loadBadgePhotos()">photos</button>
+
+<a *ngIf="photosSession" [href]="photosSession.pickerUri" target="_blank">Link to the photos picker page!</a>
