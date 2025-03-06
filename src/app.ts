@@ -3,41 +3,34 @@ import express from "express"
 import session from "express-session"
 import passport from "passport"
 import { db, setHeaders } from "./middleware"
-import path from "node:path"
+import { fetchPhotos, getPeople, getPeoplePhotos, getPersonById, 
+    photosCheck, postPeople, savePicture, sendBackToAngular } from './routeFunctions'
 
 const app = express()
+const sessionConfig = {
+    secret: process.env.SESSION_SECRET ?? "session_secret",
+    resave: true,
+    saveUninitialized: true,
+    cookie: { secure: false }
+}
 
-app.set('trust proxy', 1);
+app.set('trust proxy', 1)
 
 app.use(express.json())
 app.use(express.static('public/browser'))
-app.use(session({secret: process.env.SESSION_SECRET ?? "aham", resave: true,
-    saveUninitialized: true, cookie: { secure: false }}))
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(session(sessionConfig))
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(db)
 app.use(setHeaders)
 
-app.post('/api/people', async (req: any, res) => {
-    req.db.collection('people').drop()
-    req.db.collection('people').insertMany(req.body)
-    res.json( { success: true } )
-})
-app.post('/api/save-picture', async (req: any, res) => {
-    const { email, picture } = req.body
-    req.db.collection('people').updateOne({ 'Email CI&T': email }, { $set: { picture } } )
-    res.json( { success: true } )
-})
-app.get('/api/people', async (req: any, res) => {
-    let cursor = await req.db.collection('people').find()
-    res.json(await cursor.toArray())
-})
-app.get('/api/person/:id', async (req: any, res) => {
-    let person = await req.db.collection('people').findOne({'Email CI&T': req.params.id})
-    res.json(person)
-})
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/browser/index.html'));
-});
+app.get('/api/people', getPeople)
+app.post('/api/people', postPeople)
+app.post('/api/save-picture', savePicture)
+app.get('/api/people/photos', getPeoplePhotos)
+app.get('/api/people/photosCheck', photosCheck)
+app.get('/api/people/fetchPhotos', fetchPhotos)
+app.get('/api/person/:id', getPersonById)
+app.get('*', sendBackToAngular)
 
 app.listen(process.env.PORT ?? 3000, () => console.log("running"))

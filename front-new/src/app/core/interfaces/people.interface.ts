@@ -11,18 +11,5 @@ export interface PeopleInterface {
   team: string;
   profile_completion: number;
   birthday_date?: Date | null;
-}
-
-export interface PeopleInterfaceDTO {
-  _id: string
-  Name: string
-  "Start Date": string
-  Engagement: string
-  Team: string
-  "Email CI&T": string
-  Login: string
-  "Primary Skills": string
-  "First Name": string
-  id: string;
-  picture: string;
+  badge_photo?: string;
 }
