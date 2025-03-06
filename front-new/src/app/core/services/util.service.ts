@@ -2,7 +2,7 @@ import { EngagementInterface } from '../interfaces/engagement-interface';
 import { TeamInterface } from '../interfaces/team.interface';
 import { PeopleInterface } from './../interfaces/people.interface';
 import { Injectable } from '@angular/core';
-import { groupBy, filter } from 'lodash'
+import { groupBy, filter, forEach } from 'lodash'
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,6 @@ export class UtilService {
         });
       }
     });
-
     return engagements;
   }
 
@@ -69,9 +68,5 @@ export class UtilService {
       });
     }
     return teams;
-  }
-
-  groupByKey(list: any[], key:string): any {
-    return list.reduce((hash, obj) => ({...hash, [obj[key]]:( hash[obj[key]] || [] ).concat(obj)}), {})
   }
 }

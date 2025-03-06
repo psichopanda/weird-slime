@@ -16,6 +16,7 @@ export class PeopleService {
     let url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/People`
     let headers = { Authorization: `Bearer ${accessToken}`}
     return this.http.get( encodeURI(url), { headers } )
+
   }
 
   async getPeoplePhotos(accessToken: string){
@@ -58,5 +59,11 @@ export class PeopleService {
 
   getById(id: number): Observable<any> {
     return this.http.get(`${environment.url}/api/person/${id}`);
+  }
+
+  private getRandomInt(min: number, max: number): number {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 }

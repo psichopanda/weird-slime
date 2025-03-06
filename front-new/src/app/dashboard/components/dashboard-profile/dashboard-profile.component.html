@@ -1,0 +1,39 @@
+<p-ifta-label class="my-1">
+  <input pInputText id="name" readonly [ngModel]="config.data?.name" autocomplete="off" />
+  <label for="name">Nome</label>
+</p-ifta-label>
+
+<p-ifta-label class="my-1">
+  <input pInputText id="email_cit" readonly [ngModel]="config.data?.email_cit" autocomplete="off" />
+  <label for="name">E-mail Ci&T</label>
+</p-ifta-label>
+
+<p-ifta-label class="my-1">
+  <input pInputText id="engagement" readonly [ngModel]="config.data?.engagement" autocomplete="off" />
+  <label for="name">Engagement</label>
+</p-ifta-label>
+
+<p-ifta-label class="my-1">
+  <input pInputText id="login" readonly [ngModel]="config.data?.login" autocomplete="off" />
+  <label for="name">Login</label>
+</p-ifta-label>
+
+<p-ifta-label class="my-1">
+  <input pInputText id="primary_skills" readonly [ngModel]="config.data?.primary_skills" autocomplete="off" />
+  <label for="name">Primary Skills</label>
+</p-ifta-label>
+
+<p-ifta-label class="my-1">
+  <input pInputText id="team" readonly [ngModel]="config.data?.team" autocomplete="off" />
+  <label for="name">Team</label>
+</p-ifta-label>
+
+<div class="my-1">
+  <label class="block mb-1"> Start date </label>
+  <p-datepicker [ngModel]="config.data?.start_date" [showIcon]="true" disabled="true" inputId="buttondisplay" readonlyInput [showOnFocus]="false" dateFormat="dd/mm/yy" />
+</div>
+
+<div class="my-1">
+  <label class="block mb-1"> Profile completion </label>
+  <p-progressbar [value]="config.data?.profile_completion" />
+</div>

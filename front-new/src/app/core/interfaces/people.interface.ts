@@ -10,4 +10,5 @@ export interface PeopleInterface {
   start_date: Date;
   team: string;
   badge_photo?: string;
+  profile_completion: number
 }
