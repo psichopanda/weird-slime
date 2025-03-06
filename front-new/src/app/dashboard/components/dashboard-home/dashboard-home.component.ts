@@ -24,8 +24,31 @@ export class DashboardHomeComponent implements OnInit {
   private peopleService: PeopleService = inject(PeopleService);
 
   ngOnInit(): void {
+<<<<<<< Updated upstream
     this.peopleService.listAll().subscribe(res => {
       this.engagement = res;
+=======
+    this.loadPeople();
+  }
+
+  loadPeople(): void {
+    this.peopleService.listAll().pipe(map(item => this.vision === 'engagement' ? this.utilService.transformPeopleToEngament(item) : this.utilService.transformPeopleToTeam(item))).subscribe((res: any) => {
+      if (this.vision === 'team') {
+        this.teams = res;
+        interval(5000).pipe(takeWhile(() => this.vision === 'team')).subscribe(() => {
+          // @ts-ignore
+          this.teams.push(this.teams.shift());
+        });
+      }
+
+      if (this.vision === 'engagement') {
+        this.engagement = res;
+        interval(5000).pipe(takeWhile(() => this.vision === 'engagement')).subscribe(() => {
+          // @ts-ignore
+          this.engagement.push(this.engagement.shift());
+        });
+      }
+>>>>>>> Stashed changes
     });
 
     // @ts-ignore

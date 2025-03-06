@@ -19,7 +19,6 @@ export class ApiService {
     })
     await new Promise<void>((resolve) => {
       a.subscribe(async (data: any) => {
-        console.log("data retrieved")
         await this.savePeople(this.transformSheetsData(data.values))
         resolve()
       })
