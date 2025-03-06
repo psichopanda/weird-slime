@@ -1,3 +1,4 @@
+
 import { PeopleInterface } from './../interfaces/people.interface';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
@@ -8,7 +9,6 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class PeopleService {
-
   private http: HttpClient = inject(HttpClient);
 
   getPeopleDataSheet(accessToken: string){

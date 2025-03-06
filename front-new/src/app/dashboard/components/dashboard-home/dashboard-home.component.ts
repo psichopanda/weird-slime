@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit, Signal } from '@angular/core';
 import { PeopleService } from '../../../core/services/people.service';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -19,6 +19,8 @@ import { TeamInterface } from '../../../core/interfaces/team.interface';
 import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { VisionLocalStorageService } from '../../../core/services/vision-local-storage.service';
+import { VisionInterface } from '../../../core/interfaces/vision-interface';
 
 @Component({
   selector: 'app-dashboard-home',
@@ -64,9 +66,10 @@ export class DashboardHomeComponent implements OnInit {
 
   public engagement: EngagementInterface[];
   public teams: TeamInterface[];
-  public vision: string = 'team';
-  public rotateTeams: boolean = true;
 
+  readonly vision: Signal<VisionInterface> = inject(VisionLocalStorageService).state.asReadonly();
+
+  private visionLocalStorageService: VisionLocalStorageService = inject(VisionLocalStorageService);
   private peopleService: PeopleService = inject(PeopleService);
   private utilService: UtilService = inject(UtilService);
   private transitionTime: number = 15000;
@@ -78,12 +81,12 @@ export class DashboardHomeComponent implements OnInit {
 
   loadPeople(): void {
     this.blockUI.start();
-    this.peopleService.listAll().pipe(map(item => this.vision === 'engagement' ? this.utilService.transformPeopleToEngament(item) : this.utilService.transformPeopleToTeam(item)))
+    this.peopleService.listAll().pipe(map(item => this.vision().vision === 'engagement' ? this.utilService.transformPeopleToEngament(item) : this.utilService.transformPeopleToTeam(item)))
       .subscribe((res: any) => {
-      if (this.vision === 'team') {
+      if (this.vision().vision === 'team') {
         this.teams = res;
       }
-      if (this.vision === 'engagement') {
+      if (this.vision().vision === 'engagement') {
         this.engagement = res;
       }
     }).add(() => {
@@ -91,19 +94,22 @@ export class DashboardHomeComponent implements OnInit {
         this.blockUI.stop()
       }, 2000)
     });
+
+    this.visionLocalStorageService.updateValues(this.vision());
   }
 
   toggleRotateTeams(): void {
-    if (this.vision === 'team') {
-      interval(this.transitionTime).pipe(takeWhile(() => this.vision === 'team' && this.rotateTeams)).subscribe(() => {
+    if (this.vision().vision === 'team') {
+      interval(this.transitionTime).pipe(takeWhile(() => this.vision().vision === 'team' && this.vision().rotate_teams)).subscribe(() => {
         this.teams.push(<TeamInterface>this.teams.shift());
       });
     }
 
-    if (this.vision === 'engagement') {
-      interval(this.transitionTime).pipe(takeWhile(() => this.vision === 'engagement' && this.rotateTeams)).subscribe(() => {
+    if (this.vision().vision === 'engagement') {
+      interval(this.transitionTime).pipe(takeWhile(() => this.vision().vision === 'engagement' && this.vision().rotate_teams)).subscribe(() => {
         this.engagement.push(<EngagementInterface>this.engagement.shift());
       });
     }
+    this.visionLocalStorageService.updateValues(this.vision());
   }
 }

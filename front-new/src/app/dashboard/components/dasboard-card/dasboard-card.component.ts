@@ -21,7 +21,7 @@ export class DasboardCardComponent {
 
   openProfile(people: PeopleInterface | undefined): void {
     this.dialogService.open(DashboardProfileComponent, {
-      header: people?.name,
+      header: people?.first_name,
       data: people,
       width: '50vw',
       contentStyle: { overflow: 'auto' },
