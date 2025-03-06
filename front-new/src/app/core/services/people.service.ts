@@ -16,7 +16,6 @@ export class PeopleService {
     let url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/People`
     let headers = { Authorization: `Bearer ${accessToken}`}
     return this.http.get( encodeURI(url), { headers } )
-
   }
 
   async getPeoplePhotos(accessToken: string){

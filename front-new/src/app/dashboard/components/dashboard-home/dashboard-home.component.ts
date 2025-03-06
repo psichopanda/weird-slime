@@ -73,6 +73,7 @@ export class DashboardHomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPeople();
+    this.toggleRotateTeams();
   }
 
   loadPeople(): void {

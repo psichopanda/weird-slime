@@ -31,7 +31,6 @@ export class UtilService {
         people: filteredPeople[key]
       });
     }
-
     return teams;
   }
 

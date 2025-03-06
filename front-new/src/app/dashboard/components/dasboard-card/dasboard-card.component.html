@@ -1,7 +1,8 @@
 <p-card class="col border" [header]="people()?.name">
   <ng-template class="flex justify-content-center" #header>
-    <img alt="Card" class="md:bg-contain bg-center bg-no-repeat border-round h-10rem w-10rem shadow-1 mt-2" 
-      [src]="people()?.badge_photo ?? people()?.picture ?? 'default-avatar.jpg'"/>
+    <img class="md:bg-contain bg-center bg-no-repeat border-round h-10rem w-10rem shadow-1 mt-2" 
+    alt="Card" (click)="openProfile(people())" 
+    [src]="people()?.badge_photo ?? people()?.picture ?? 'default-avatar.jpg'"/>
   </ng-template>
 
   <ng-template #title> {{people()?.name | name}} </ng-template>
