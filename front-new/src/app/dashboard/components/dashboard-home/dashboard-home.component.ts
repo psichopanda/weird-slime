@@ -21,6 +21,8 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { VisionLocalStorageService } from '../../../core/services/vision-local-storage.service';
 import { VisionInterface } from '../../../core/interfaces/vision-interface';
+import { PeopleInterface } from '../../../core/interfaces/people.interface';
+import { PersonCardComponent } from '../person-card/person-card.component';
 
 @Component({
   selector: 'app-dashboard-home',
@@ -32,6 +34,7 @@ import { VisionInterface } from '../../../core/interfaces/vision-interface';
     FluidModule,
     DataViewModule,
     DasboardCardComponent,
+    PersonCardComponent,
     ScrollerModule,
     AvatarModule,
     AvatarGroupModule,
@@ -66,6 +69,7 @@ export class DashboardHomeComponent implements OnInit {
 
   public engagement: EngagementInterface[];
   public teams: TeamInterface[];
+  public people: PeopleInterface[];
 
   readonly vision: Signal<VisionInterface> = inject(VisionLocalStorageService).state.asReadonly();
 
@@ -81,13 +85,26 @@ export class DashboardHomeComponent implements OnInit {
 
   loadPeople(): void {
     this.blockUI.start();
-    this.peopleService.listAll().pipe(map(item => this.vision().vision === 'engagement' ? this.utilService.transformPeopleToEngament(item) : this.utilService.transformPeopleToTeam(item)))
+    this.peopleService.listAll().pipe(map(item => 
+      {
+        let transformedData
+        if(this.vision().vision === 'engagement')
+          transformedData = this.utilService.transformPeopleToEngament(item) 
+        else if(this.vision().vision === 'team')
+          transformedData = this.utilService.transformPeopleToTeam(item)
+        else
+          transformedData = item
+        return transformedData
+      }))
       .subscribe((res: any) => {
       if (this.vision().vision === 'team') {
         this.teams = res;
       }
       if (this.vision().vision === 'engagement') {
         this.engagement = res;
+      }
+      if (this.vision().vision === 'people') {
+        this.people = res;
       }
     }).add(() => {
       setTimeout(() => {
@@ -110,6 +127,13 @@ export class DashboardHomeComponent implements OnInit {
         this.engagement.push(<EngagementInterface>this.engagement.shift());
       });
     }
+
+    if (this.vision().vision === 'people') {
+      interval(this.transitionTime).pipe(takeWhile(() => this.vision().vision === 'people' && this.vision().rotate_teams)).subscribe(() => {
+        this.people.push(<PeopleInterface>this.people.shift());
+      });
+    }
+
     this.visionLocalStorageService.updateValues(this.vision());
   }
 }

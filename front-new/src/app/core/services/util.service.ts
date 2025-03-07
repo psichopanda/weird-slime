@@ -45,6 +45,7 @@ export class UtilService {
     let people:any = []
     for(let l=4; l<sheetsData.length; l++){
       let person: any = {}
+      if(!sheetsData[l][1]) continue;
       if(l == 4) continue;
       for( let c=0; c < sheetsData[l].length; c++ ){
         let columnTitle = sheetsData[4][c]
