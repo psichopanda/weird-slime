@@ -1,13 +1,18 @@
 <div class="m-2">
   <div class="flex flex-wrap gap-4 end py-2" style="place-content: center;">
     <div class="flex items-center">
-        <p-radiobutton name="team" value="team" [(ngModel)]="vision().vision" inputId="team" (ngModelChange)="loadPeople()" />
+        <p-radiobutton value="team" [(ngModel)]="vision().vision" inputId="team" (ngModelChange)="loadPeople()" />
         <label class="ml-2">Team</label>
     </div>
 
     <div class="flex items-center">
-        <p-radiobutton name="pizza" value="engagement" [(ngModel)]="vision().vision" inputId="ingredient2" (ngModelChange)="loadPeople()" />
+        <p-radiobutton value="engagement" [(ngModel)]="vision().vision" inputId="engagement" (ngModelChange)="loadPeople()" />
         <label class="ml-2">Engagement</label>
+    </div>
+
+    <div class="flex items-center">
+        <p-radiobutton value="people" [(ngModel)]="vision().vision" inputId="people" (ngModelChange)="loadPeople()" />
+        <label class="ml-2">People</label>
     </div>
 
     <div class="card flex justify-center">
@@ -67,6 +72,16 @@
             }
         </p>
     </p-fieldset>
+    }
+  }
+
+  @if (vision().vision === 'people') {
+    @for (person of people; track $index; ; let f = $first) {
+      @defer (on viewport) {
+        <app-person-card [people]="person" style="float: left; margin: 1rem;"></app-person-card>
+      } @placeholder {
+        <p>Carregando...</p>
+      }
     }
   }
 </div>

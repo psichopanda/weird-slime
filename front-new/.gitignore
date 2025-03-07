@@ -37,6 +37,7 @@ yarn-error.log
 testem.log
 /typings
 *.prod.ts
+/public/photos/*
 
 # System files
 .DS_Store
