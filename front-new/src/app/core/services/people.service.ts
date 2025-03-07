@@ -49,7 +49,13 @@ export class PeopleService {
   }
 
   listAll(): Observable<PeopleInterface[]> {
-    return this.http.get<PeopleInterface[]>(`${environment.url}/api/people`);
+    return this.http.get<PeopleInterface[]>(`${environment.url}/api/people`).pipe(map(item  => {
+      return item.map(i => {
+        i.profile_completion = this.getRandomInt(1, 100);
+        i.start_date = new Date(i.start_date);
+        return i;
+      });
+    }));
   }
 
   savePeople(peopleData: any): Observable<any> {
