@@ -5,7 +5,7 @@ import passport from "passport"
 import { db, setHeaders } from "./middleware"
 import { fetchPhotos, getPeople, getPeoplePhotos, getPersonById, 
     photosCheck, postPeople, savePicture, sendBackToAngular } from './routeFunctions'
-
+const cors = require('cors');
 const app = express()
 const sessionConfig = {
     secret: process.env.SESSION_SECRET ?? "session_secret",
@@ -13,6 +13,10 @@ const sessionConfig = {
     saveUninitialized: true,
     cookie: { secure: false }
 }
+
+app.use(cors({
+  origin: '*'
+}));
 
 app.set('trust proxy', 1)
 
