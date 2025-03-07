@@ -78,7 +78,7 @@
   @if (vision().vision === 'people') {
     @for (person of people; track $index; ; let f = $first) {
       @defer (on viewport) {
-        <app-person-card [people]="person" style="float: left; margin: 1rem;"></app-person-card>
+        <app-person-card [people]="person" style="float: left; margin: 0.5rem; min-width: 220px;"></app-person-card>
       } @placeholder {
         <p>Carregando...</p>
       }

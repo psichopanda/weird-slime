@@ -1,7 +1,8 @@
-<p-card class="col border" [header]="people()?.name">
-  <ng-template class="flex justify-content-center" #header>
-    <img class="md:bg-contain bg-center bg-no-repeat border-round h-10rem w-10rem shadow-1 mt-2" 
-    alt="Card" (click)="openProfile(people())" 
+<p-card>
+  <ng-template #header>
+    <img class="border-round h-10rem w-10rem" 
+    alt="Card" 
+    (click)="openProfile(people())" 
     [src]="people()?.badge_photo ?? people()?.picture ?? 'default-avatar.jpg'"/>
   </ng-template>
 
@@ -9,11 +10,7 @@
 
   <ng-template #subtitle>
     <p class="my-1">{{people()?.login ? people()?.login : '-'}}</p>
-    <p class="m-0 count-characters text-bold" 
-      [pTooltip]="people()?.primary_skills" 
-      style="font-size: 12px;">
-      {{people()?.primary_skills}}
-    </p>
+    <p class="m-0 count-characters text-bold" [pTooltip]="people()?.primary_skills" style="font-size: 12px;">{{people()?.primary_skills}}</p>
   </ng-template>
-  
+
 </p-card>
