@@ -1,18 +1,20 @@
 <p-card class="col border" [header]="people()?.name">
   <ng-template class="flex justify-content-center" #header>
-    <img class="md:bg-contain bg-center bg-no-repeat border-round h-10rem w-10rem shadow-1 mt-2" 
-    alt="Card" (click)="openProfile(people())" 
+    <img class="md:bg-contain bg-center bg-no-repeat border-round h-10rem w-10rem shadow-1 mt-2"
+    alt="Card" (click)="openProfile(people())"
     [src]="people()?.badge_photo ?? people()?.picture ?? 'default-avatar.jpg'"/>
+
+    <img class="cake-img" src="birthday_cake.png" height="40" alt="" *ngIf="people()?.show_birthday" (click)="openProfile(people())">
   </ng-template>
 
   <ng-template #title> {{people()?.name | name}} </ng-template>
 
   <ng-template #subtitle>
-    <p class="my-1">{{people()?.login ? people()?.login : '-'}}</p>
+    <p class="my-0">{{people()?.login ? people()?.login : '-'}}</p>
     <p class="m-0 count-characters text-bold" [pTooltip]="people()?.primary_skills" style="font-size: 12px;">{{people()?.primary_skills}}</p>
   </ng-template>
 
-  <ng-template #footer>
-    <p-progressbar [value]="people()?.profile_completion" />
-  </ng-template>
+<!--  <ng-template #footer>-->
+<!--    <p-progressbar [value]="people()?.profile_completion" />-->
+<!--  </ng-template>-->
 </p-card>

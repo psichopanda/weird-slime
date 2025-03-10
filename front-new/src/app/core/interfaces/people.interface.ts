@@ -12,4 +12,5 @@ export interface PeopleInterface {
   profile_completion: number;
   birthday_date?: Date | null;
   badge_photo?: string;
+  show_birthday: boolean;
 }
