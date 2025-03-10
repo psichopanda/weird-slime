@@ -1,7 +1,7 @@
 export const environment = {
-  url: 'http://localhost:3000',
   sheetsId: "",
   production: false,
-  googleClient: "",
+  googleClient: '',
   apiKey: "",
+  url: 'http://localhost:3000',
 };
