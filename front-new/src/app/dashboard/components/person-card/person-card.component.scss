@@ -1,13 +1,7 @@
 img {
   border: 3px solid currentColor;
   color: #fa5a5070;
-  transition: color 250ms linear;
   object-fit: cover;
-}
-
-img:hover {
-  cursor: pointer;
-  color: #FA5A50;
 }
 
 .count-characters {
@@ -18,9 +12,4 @@ img:hover {
   display: inline-block;
   text-transform: uppercase;
   font-size: 15px;
-}
-
-.p-card {
-  height: 330px;
-  width: 190px;
 }
