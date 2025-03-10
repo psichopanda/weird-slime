@@ -1,4 +1,4 @@
 export interface VisionInterface {
   rotate_teams: boolean;
-  vision: 'engagement' | 'team';
+  vision: 'engagement' | 'team' | 'people';
 }
