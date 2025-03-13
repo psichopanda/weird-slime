@@ -1,13 +1,13 @@
-img {
+img:first-child {
   border: 3px solid currentColor;
   color: #fa5a5070;
-  transition: color 250ms linear;
   object-fit: cover;
 }
 
 img:hover {
   cursor: pointer;
   color: #FA5A50;
+  transition: color 250ms linear;
 }
 
 .count-characters {
@@ -20,7 +20,8 @@ img:hover {
   font-size: 15px;
 }
 
-.p-card {
-  height: 330px;
-  width: 190px;
+.cake-img {
+  position: absolute;
+  margin-top: 140px;
+  margin-left: 141px;
 }

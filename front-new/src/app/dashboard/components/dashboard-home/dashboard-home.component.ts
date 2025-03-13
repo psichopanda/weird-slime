@@ -85,11 +85,11 @@ export class DashboardHomeComponent implements OnInit {
 
   loadPeople(): void {
     this.blockUI.start();
-    this.peopleService.listAll().pipe(map(item => 
+    this.peopleService.listAll().pipe(map(item =>
       {
         let transformedData
         if(this.vision().vision === 'engagement')
-          transformedData = this.utilService.transformPeopleToEngament(item) 
+          transformedData = this.utilService.transformPeopleToEngament(item)
         else if(this.vision().vision === 'team')
           transformedData = this.utilService.transformPeopleToTeam(item)
         else

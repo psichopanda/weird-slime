@@ -6,10 +6,11 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { DashboardProfileComponent } from '../dashboard-profile/dashboard-profile.component';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { TooltipModule } from 'primeng/tooltip';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-dasboard-card',
-  imports: [CardModule, NamePipe, ProgressBarModule, DynamicDialogModule, TooltipModule],
+  imports: [CardModule, NamePipe, ProgressBarModule, DynamicDialogModule, TooltipModule, NgIf],
   templateUrl: './dasboard-card.component.html',
   styleUrl: './dasboard-card.component.scss',
   providers: [DialogService]

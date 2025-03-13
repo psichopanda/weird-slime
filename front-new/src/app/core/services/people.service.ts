@@ -53,6 +53,7 @@ export class PeopleService {
       return item.map(i => {
         i.profile_completion = this.getRandomInt(1, 100);
         i.start_date = new Date(i.start_date);
+        i.show_birthday = Math.random() >= 0.8;
         return i;
       });
     }));
