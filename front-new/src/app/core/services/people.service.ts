@@ -53,7 +53,7 @@ export class PeopleService {
     return this.http.get<PeopleInterface[]>(`${environment.url}/api/people`).pipe(map(item  => {
       return item.map(i => {
         i.profile_completion = this.getRandomInt(1, 100);
-        i.start_date = new Date(i.start_date);
+        i.start_date = i.start_date ? new Date(i.start_date) : null;
         i.show_birthday = Math.random() >= 0.8;
         i.new_employ = i.start_date ? this.checkStartDate(moment(i.start_date)) : false
         return i;

@@ -7,7 +7,7 @@ export interface PeopleInterface {
   first_name: string;
   login: string;
   primary_skills: string;
-  start_date: Date;
+  start_date: Date | null;
   team: string;
   profile_completion: number;
   birthday_date?: Date | null;
