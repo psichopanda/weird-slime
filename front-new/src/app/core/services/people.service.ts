@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import moment, { Moment } from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -52,8 +53,9 @@ export class PeopleService {
     return this.http.get<PeopleInterface[]>(`${environment.url}/api/people`).pipe(map(item  => {
       return item.map(i => {
         i.profile_completion = this.getRandomInt(1, 100);
-        i.start_date = new Date(i.start_date);
+        i.start_date = i.start_date ? new Date(i.start_date) : null;
         i.show_birthday = Math.random() >= 0.8;
+        i.new_employ = i.start_date ? this.checkStartDate(moment(i.start_date)) : false
         return i;
       });
     }));
@@ -71,5 +73,12 @@ export class PeopleService {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  private checkStartDate(startDate: Moment): boolean {
+    if (startDate.isAfter(moment())) {
+      return true;
+    }
+    return moment().isBetween(moment(startDate), moment(startDate).add(1, 'month'));
   }
 }

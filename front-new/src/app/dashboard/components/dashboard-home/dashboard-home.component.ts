@@ -23,6 +23,7 @@ import { VisionLocalStorageService } from '../../../core/services/vision-local-s
 import { VisionInterface } from '../../../core/interfaces/vision-interface';
 import { PeopleInterface } from '../../../core/interfaces/people.interface';
 import { PersonCardComponent } from '../person-card/person-card.component';
+import * as _ from 'underscore';
 
 @Component({
   selector: 'app-dashboard-home',
@@ -87,13 +88,17 @@ export class DashboardHomeComponent implements OnInit {
     this.blockUI.start();
     this.peopleService.listAll().pipe(map(item =>
       {
-        let transformedData
-        if(this.vision().vision === 'engagement')
-          transformedData = this.utilService.transformPeopleToEngament(item)
-        else if(this.vision().vision === 'team')
-          transformedData = this.utilService.transformPeopleToTeam(item)
-        else
-          transformedData = item
+        let transformedData;
+        switch (this.vision().vision) {
+          case "engagement":
+            transformedData = this.utilService.transformPeopleToEngament(item);
+            break;
+          case "team":
+            transformedData = this.utilService.transformPeopleToTeam(item);
+            break;
+          default:
+            transformedData = _.sortBy(item, function(item) { return item.start_date; }).reverse()
+        }
         return transformedData
       }))
       .subscribe((res: any) => {
@@ -111,7 +116,6 @@ export class DashboardHomeComponent implements OnInit {
         this.blockUI.stop()
       }, 2000)
     });
-
     this.visionLocalStorageService.updateValues(this.vision());
   }
 
