@@ -1,6 +1,16 @@
-<p>admin works!</p>
-<button (click)="loadPeopleSpreadsheet()">sheets</button>
+<div class="m-2">
+  <div class="flex flex-wrap gap-4 end py-2" style="place-content: center;">
+    <p-button (click)="loadPeopleSpreadsheet()">Atualizar Planilha</p-button>
 
-<button (click)="loadBadgePhotos()">photos</button>
+    <p-button (click)="loadBadgePhotos()">Carregar Fotos</p-button>
+  </div>
+</div>
 
-<a *ngIf="photosSession" [href]="photosSession.pickerUri" target="_blank">Link to the photos picker page!</a>
+<div class="m-2">
+  @if (message) {
+    <p-message [severity]="message.severity">
+      <span>{{ message.message }}</span>
+      <p-progress-spinner class="mx-2" *ngIf="message.show_loading" strokeWidth="6" fill="transparent" animationDuration=".5s" [style]="{ width: '25px', height: '25px' }" />
+    </p-message>
+  }
+</div>
