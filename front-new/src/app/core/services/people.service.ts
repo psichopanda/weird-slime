@@ -5,6 +5,7 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import moment, { Moment } from 'moment';
+import { Badges } from '../exports/badge.export';
 
 @Injectable({
   providedIn: 'root'
@@ -55,7 +56,27 @@ export class PeopleService {
         i.profile_completion = this.getRandomInt(1, 100);
         i.start_date = i.start_date ? new Date(i.start_date) : null;
         i.show_birthday = Math.random() >= 0.8;
-        i.new_employ = i.start_date ? this.checkStartDate(moment(i.start_date)) : false
+        i.new_employ = i.start_date ? this.checkStartDate(moment(i.start_date)) : false;
+        i.badges = [];
+
+        /**
+         * Developer Badge
+         */
+        if (['ekoziol@ciandt.com', 'alvarof@ciandt.com'].includes(i.email_cit)) {
+          const badgeDeveloper = Badges.filter(b => b.slug === 'developer')[0];
+          i.badges.push(badgeDeveloper);
+
+          // const badgeCrown = Badges.filter(b => b.slug === 'crown')[0];
+          // i.badges.push(badgeCrown);
+        }
+
+        /**
+         * Birth Day Cake Badge
+         */
+        if (i.show_birthday) {
+          const badgeBirthDayCake = Badges.filter(b => b.slug === 'birthday_cake')[0];
+          i.badges.push(badgeBirthDayCake);
+        }
         return i;
       });
     }));

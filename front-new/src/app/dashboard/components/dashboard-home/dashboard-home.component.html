@@ -79,7 +79,7 @@
     <p class="grid flex">
       @for (person of people; track $index; ; let f = $first) {
         @defer (on viewport) {
-          <app-dasboard-card [@animation]="person" class="mx-2 flex-initial flex align-items-center justify-content-center font-bold" [people]="person"></app-dasboard-card>
+          <app-dasboard-card [@animation]="people" class="mx-2 flex-initial flex align-items-center justify-content-center font-bold" [people]="person"></app-dasboard-card>
         } @placeholder {
           <p>Carregando...</p>
         }

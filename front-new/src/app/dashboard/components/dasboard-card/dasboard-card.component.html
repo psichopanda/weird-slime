@@ -4,9 +4,13 @@
     alt="Card" (click)="openProfile(people())"
     [src]="people()?.badge_photo ?? people()?.picture ?? 'default-avatar.jpg'"/>
 
-    <img class="cake-img" src="birthday_cake.png" height="40" alt="" *ngIf="people()?.show_birthday" (click)="openProfile(people())">
-
     <img class="new-img" src="new.png" *ngIf="people()?.new_employ" height="40">
+
+    <div class="badge-img">
+    @for (badge of people()?.badges; track badge) {
+        <img class="" [src]="badge.image" height="40">
+    }
+    </div>
   </ng-template>
 
   <ng-template #title> {{people()?.name | name}} </ng-template>

@@ -32,3 +32,19 @@ img:hover {
   margin-top: -18px;
   height: 100px;
 }
+
+.badge-img {
+  border: none !important;
+  height: 160px;
+  position: absolute;
+  display: flex;
+  place-content: end;
+  flex-direction: column;
+  margin-left: 159px;
+  //margin-top: 100px;
+}
+
+.badge-img img {
+  border: none !important;
+  height: 50px;
+}

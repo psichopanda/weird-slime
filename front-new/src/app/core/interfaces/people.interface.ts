@@ -14,4 +14,11 @@ export interface PeopleInterface {
   badge_photo?: string;
   show_birthday: boolean;
   new_employ: boolean;
+  badges: BadgeInterface[]
+}
+
+export interface BadgeInterface {
+  name: string;
+  slug: string;
+  image: string;
 }

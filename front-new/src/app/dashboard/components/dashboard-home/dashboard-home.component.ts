@@ -51,14 +51,14 @@ import * as _ from 'underscore';
       transition('* <=> *', [
         query(':enter', [
           style({opacity: 0, transform: 'scale(0.7)'}),
-          stagger(400, [
-            animate('1800ms ease-in', style({opacity: 1, transform: 'scale(1)'}))
+          stagger(500, [
+            animate('2000ms ease-in', style({opacity: 1, transform: 'scale(1)'}))
           ])
         ], { optional: true }),
         query(':leave', [
-          style({opacity: 1, transform: 'scale(1)'}),
-          stagger(-200, [
-            animate('800ms ease-in', style({opacity: 0, transform: 'scale(0.7)'}))
+          style({opacity: 2, transform: 'scale(1)'}),
+          stagger(600, [
+            animate('2500ms ease-out', style({opacity: 0, transform: 'scale(0.7)'}))
           ])
         ], { optional: true })
       ])
@@ -72,12 +72,12 @@ export class DashboardHomeComponent implements OnInit {
   public teams: TeamInterface[];
   public people: PeopleInterface[];
 
-  readonly vision: Signal<VisionInterface> = inject(VisionLocalStorageService).state.asReadonly();
-
   private visionLocalStorageService: VisionLocalStorageService = inject(VisionLocalStorageService);
   private peopleService: PeopleService = inject(PeopleService);
   private utilService: UtilService = inject(UtilService);
-  private transitionTime: number = 15000;
+  private transitionTime: number = 5000;
+
+  readonly vision: Signal<VisionInterface> = inject(VisionLocalStorageService).state.asReadonly();
 
   ngOnInit(): void {
     this.loadPeople();
