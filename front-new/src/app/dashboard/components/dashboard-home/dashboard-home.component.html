@@ -76,12 +76,14 @@
   }
 
   @if (vision().vision === 'people') {
-    @for (person of people; track $index; ; let f = $first) {
-      @defer (on viewport) {
-        <app-person-card [people]="person" style="float: left; margin: 0.5rem; min-width: 220px;"></app-person-card>
-      } @placeholder {
-        <p>Carregando...</p>
+    <p class="grid flex">
+      @for (person of people; track $index; ; let f = $first) {
+        @defer (on viewport) {
+          <app-dasboard-card [@animation]="person" class="mx-2 flex-initial flex align-items-center justify-content-center font-bold" [people]="person"></app-dasboard-card>
+        } @placeholder {
+          <p>Carregando...</p>
+        }
       }
-    }
+    </p>
   }
 </div>

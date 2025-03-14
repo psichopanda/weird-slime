@@ -87,13 +87,15 @@ export class DashboardHomeComponent implements OnInit {
     this.blockUI.start();
     this.peopleService.listAll().pipe(map(item =>
       {
-        let transformedData
+        let transformedData;
         if(this.vision().vision === 'engagement')
           transformedData = this.utilService.transformPeopleToEngament(item)
         else if(this.vision().vision === 'team')
           transformedData = this.utilService.transformPeopleToTeam(item)
         else
-          transformedData = item
+          transformedData = item.sort((a: PeopleInterface, b: PeopleInterface) => {
+            return b.start_date.getTime() - a.start_date.getTime();
+          });
         return transformedData
       }))
       .subscribe((res: any) => {
