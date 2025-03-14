@@ -9,7 +9,7 @@ export class NamePipe implements PipeTransform {
     if (!value) {
       return '';
     }
-    value = value.replace('do', '').replace('da', '').replace('dos', '').replace('de', '').replace('  ', ' ');
+    value = value.replace(' do ', ' ').replace(' da ', ' ').replace(' dos ', ' ').replace(' de ', ' ');
     return value.split(' ').slice(0, 2).join(' ');
   }
 

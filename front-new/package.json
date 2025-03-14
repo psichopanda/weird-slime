@@ -21,6 +21,7 @@
     "@primeng/themes": "^19.0.8",
     "interval-promise": "^1.4.0",
     "lodash": "^4.17.21",
+    "moment": "^2.30.1",
     "ng-block-ui": "^4.0.1",
     "primeflex": "^4.0.0",
     "primeng": "^19.0.8",

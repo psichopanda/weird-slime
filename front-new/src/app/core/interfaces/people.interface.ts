@@ -13,4 +13,5 @@ export interface PeopleInterface {
   birthday_date?: Date | null;
   badge_photo?: string;
   show_birthday: boolean;
+  new_employ: boolean;
 }
