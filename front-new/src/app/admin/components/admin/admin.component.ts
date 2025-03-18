@@ -9,6 +9,7 @@ import { MessageService } from 'primeng/api';
 import { MessageModule } from 'primeng/message';
 import { MessageInterface } from '../../../core/interfaces/message-interface';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { Router } from '@angular/router';
 
 declare var google: any;
 
@@ -29,6 +30,7 @@ export class AdminComponent implements OnInit {
 
   private utilService: UtilService = inject(UtilService);
   private peopleService: PeopleService = inject(PeopleService);
+  private router: Router = inject(Router);
   private client: any;
 
   constructor(
@@ -95,7 +97,11 @@ export class AdminComponent implements OnInit {
         this.message = {
           message: data.success ? 'Sucesso em carregar a planilha' : 'Erro ao carregar a planilha',
           severity: data.success ? 'success' : 'error'
-        }
+        };
+
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']);
+        }, 2000);
       })
     }, error => {
       this.message = {
@@ -127,6 +133,10 @@ export class AdminComponent implements OnInit {
             message: 'Done loading photos!',
             severity: 'success'
           };
+
+          setTimeout(() => {
+            this.router.navigate(['/dashboard']);
+          }, 2000);
         }
       }, 5000)
     } else {

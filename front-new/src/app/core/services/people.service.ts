@@ -1,5 +1,5 @@
 
-import { PeopleInterface } from './../interfaces/people.interface';
+import { BadgeInterface, PeopleInterface } from './../interfaces/people.interface';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
@@ -55,28 +55,12 @@ export class PeopleService {
       return item.map(i => {
         i.profile_completion = this.getRandomInt(1, 100);
         i.start_date = i.start_date ? new Date(i.start_date) : null;
+        /**
+         * 20% de chance de obter a badge 'Birth Cake'
+         */
         i.show_birthday = Math.random() >= 0.8;
         i.new_employ = i.start_date ? this.checkStartDate(moment(i.start_date)) : false;
-        i.badges = [];
-
-        /**
-         * Developer Badge
-         */
-        if (['ekoziol@ciandt.com', 'alvarof@ciandt.com'].includes(i.email_cit)) {
-          const badgeDeveloper = Badges.filter(b => b.slug === 'developer')[0];
-          i.badges.push(badgeDeveloper);
-
-          // const badgeCrown = Badges.filter(b => b.slug === 'crown')[0];
-          // i.badges.push(badgeCrown);
-        }
-
-        /**
-         * Birth Day Cake Badge
-         */
-        if (i.show_birthday) {
-          const badgeBirthDayCake = Badges.filter(b => b.slug === 'birthday_cake')[0];
-          i.badges.push(badgeBirthDayCake);
-        }
+        i.badges = this.updateBadges(i);
         return i;
       });
     }));
@@ -96,10 +80,37 @@ export class PeopleService {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
+  /**
+   * Verificamos se é data futura ou se hoje esta dentro de 1 mes em que a pessoa começou
+   * @param startDate
+   * @private
+   */
   private checkStartDate(startDate: Moment): boolean {
     if (startDate.isAfter(moment())) {
       return true;
     }
     return moment().isBetween(moment(startDate), moment(startDate).add(1, 'month'));
+  }
+
+  private updateBadges(people: PeopleInterface): BadgeInterface[] {
+    const badges = new Array<BadgeInterface>();
+
+    /**
+     * Developer Badge
+     */
+    if (['ekoziol@ciandt.com', 'alvarof@ciandt.com'].includes(people.email_cit)) {
+      const badgeDeveloper = Badges.filter(b => b.slug === 'developer')[0];
+      badges.push(badgeDeveloper);
+    }
+
+    /**
+     * Birth Day Cake Badge
+     */
+    if (people.show_birthday) {
+      const badgeBirthDayCake = Badges.filter(b => b.slug === 'birthday_cake')[0];
+      badges.push(badgeBirthDayCake);
+    }
+
+    return badges;
   }
 }
