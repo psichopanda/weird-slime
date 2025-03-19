@@ -63,7 +63,7 @@
         </ng-template>
 
         <p class="grid flex">
-            @for (people of team.people; track people) {
+            @for (people of team.people; track people.name) {
               @defer (on viewport) {
                 <app-dasboard-card [@animation]="team.people" class="mx-2 flex-initial flex align-items-center justify-content-center font-bold" [people]="people"></app-dasboard-card>
               } @placeholder {
