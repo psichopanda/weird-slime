@@ -3,26 +3,39 @@ import { PeopleService } from '../../../core/services/people.service';
 import { environment } from '../../../../environments/environment';
 import { NgIf } from '@angular/common';
 import { UtilService } from '../../../core/services/util.service';
+import { ButtonModule } from 'primeng/button';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { MessageService } from 'primeng/api';
+import { MessageModule } from 'primeng/message';
+import { MessageInterface } from '../../../core/interfaces/message-interface';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { Router } from '@angular/router';
 
 declare var google: any;
-declare var gapi: any;
 
 @Component({
   selector: 'app-admin',
-  imports: [NgIf],
+  imports: [NgIf, ButtonModule, MessageModule, ProgressSpinnerModule],
   templateUrl: './admin.component.html',
-  styleUrl: './admin.component.scss'
+  styleUrl: './admin.component.scss',
+  providers: [MessageService]
 })
 export class AdminComponent implements OnInit {
-  accessToken: string = '';
-  private client: any;
-  expiresAt: number = 0;
-  isLibraryLoaded = false;
+  @BlockUI() blockUI: NgBlockUI;
+
+  public message: MessageInterface;
+  public accessToken: string = '';
+  public expiresAt: number = 0;
+  public isLibraryLoaded = false;
+
   private utilService: UtilService = inject(UtilService);
   private peopleService: PeopleService = inject(PeopleService);
-  photosSession: any
+  private router: Router = inject(Router);
+  private client: any;
 
-  constructor(private ngZone: NgZone) {}
+  constructor(
+    private ngZone: NgZone
+  ) {}
 
   ngOnInit() {
     this.initializeGoogleAuth();
@@ -56,7 +69,7 @@ export class AdminComponent implements OnInit {
   initializeGoogleSignIn() {
     const scopes = [
       'profile',
-      'https://www.googleapis.com/auth/spreadsheets.readonly', 
+      'https://www.googleapis.com/auth/spreadsheets.readonly',
       'https://www.googleapis.com/auth/photospicker.mediaitems.readonly',
     ]
     this.client = google.accounts.oauth2.initTokenClient({
@@ -76,22 +89,38 @@ export class AdminComponent implements OnInit {
   }
 
   async loadPeopleSpreadsheet(){
-    alert('loading sheet')
-    let accessToken = await this.getAccessToken()
-    this.peopleService.getPeopleDataSheet(accessToken).subscribe( (data: any) => {
+    let accessToken = await this.getAccessToken();
+    this.blockUI.start();
+    this.peopleService.getPeopleDataSheet(accessToken).subscribe((data: any) => {
       let treatedData = this.utilService.transformSheetsData(data.values)
-      this.peopleService.savePeople(treatedData).subscribe(
-        data => alert(`${data.success ? "Success!" : "Failed!"}`)
-      )
-    })
+      this.peopleService.savePeople(treatedData).subscribe(data => {
+        this.message = {
+          message: data.success ? 'Sucesso em carregar a planilha' : 'Erro ao carregar a planilha',
+          severity: data.success ? 'success' : 'error'
+        };
+
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']);
+        }, 2000);
+      })
+    }, error => {
+      this.message = {
+        message: 'Error: ' + error.error.error.message,
+        severity: 'error'
+      }
+    }).add(() => this.blockUI.stop())
   }
 
   async loadBadgePhotos(){
-    alert('loading album')
+    this.message = {
+      message: 'Loading album',
+      severity: 'info',
+      show_loading: true
+    }
     if (this.isLibraryLoaded) {
-      let accessToken = await this.getAccessToken()
-      let people: any = await this.peopleService.getPeoplePhotos(accessToken)
-      this.photosSession = people
+      let accessToken = await this.getAccessToken();
+      let people: any = await this.peopleService.getPeoplePhotos(accessToken);
+      window.open(people.pickerUri, '_blank');
       let timer = setInterval( async () => {
         let check: any = await this.peopleService.checkPeoplePhotos(accessToken, people.id)
         if( check.mediaItemsSet ){
@@ -100,11 +129,21 @@ export class AdminComponent implements OnInit {
           while(images.nextPageToken){
             images = await this.peopleService.fetchPeoplePhotos(accessToken, people.id, images.nextPageToken)
           }
-          alert("done loading photos!")
+          this.message = {
+            message: 'Done loading photos!',
+            severity: 'success'
+          };
+
+          setTimeout(() => {
+            this.router.navigate(['/dashboard']);
+          }, 2000);
         }
       }, 5000)
     } else {
-      alert('Google Photos Picker library is not loaded yet.');
+      this.message = {
+        message: 'Google Photos Picker library is not loaded yet.',
+        severity: 'warn'
+      }
     }
   }
 
@@ -114,7 +153,6 @@ export class AdminComponent implements OnInit {
 
   async getAccessToken(): Promise<string> {
     if ( !this.accessToken || this.isTokenExpired() ) {
-      console.log('Invalid token, requesting new one')
       return new Promise((resolve) => {
         this.client.callback = (tokenResponse: any) => {
           this.ngZone.run(() => {

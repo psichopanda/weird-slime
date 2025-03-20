@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit, Signal } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnDestroy, OnInit, Signal } from '@angular/core';
 import { PeopleService } from '../../../core/services/people.service';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -9,7 +9,7 @@ import { FluidModule } from 'primeng/fluid';
 import { DataViewModule } from 'primeng/dataview';
 import { DasboardCardComponent } from "../dasboard-card/dasboard-card.component";
 import { ScrollerModule } from 'primeng/scroller';
-import { interval, map, takeWhile } from 'rxjs';
+import { interval, map, Subject, Subscription, takeUntil, takeWhile } from 'rxjs';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { UtilService } from '../../../core/services/util.service';
@@ -22,7 +22,8 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { VisionLocalStorageService } from '../../../core/services/vision-local-storage.service';
 import { VisionInterface } from '../../../core/interfaces/vision-interface';
 import { PeopleInterface } from '../../../core/interfaces/people.interface';
-import { PersonCardComponent } from '../person-card/person-card.component';
+import * as _ from 'underscore';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard-home',
@@ -34,7 +35,6 @@ import { PersonCardComponent } from '../person-card/person-card.component';
     FluidModule,
     DataViewModule,
     DasboardCardComponent,
-    PersonCardComponent,
     ScrollerModule,
     AvatarModule,
     AvatarGroupModule,
@@ -49,54 +49,69 @@ import { PersonCardComponent } from '../person-card/person-card.component';
     trigger('animation', [
       transition('* <=> *', [
         query(':enter', [
-          style({opacity: 0, transform: 'scale(0.7)'}),
-          stagger(400, [
-            animate('1800ms ease-in', style({opacity: 1, transform: 'scale(1)'}))
+          style({opacity: 0, transform: `scale(${environment.animations.in.scale})`}),
+          stagger(environment.animations.in.stagger, [
+            animate(`${environment.animations.in.ease}ms ease-in`, style({opacity: 1, transform: 'scale(1)'}))
           ])
         ], { optional: true }),
         query(':leave', [
-          style({opacity: 1, transform: 'scale(1)'}),
-          stagger(-200, [
-            animate('800ms ease-in', style({opacity: 0, transform: 'scale(0.7)'}))
+          style({opacity: 1, transform: `scale(${environment.animations.out.scale})`}),
+          stagger(environment.animations.out.stagger, [
+            animate(`${environment.animations.out.ease}ms ease-out`, style({opacity: 0, transform: 'scale(0.7)'}))
           ])
         ], { optional: true })
       ])
     ])
   ]
 })
-export class DashboardHomeComponent implements OnInit {
+export class DashboardHomeComponent implements OnInit, OnDestroy {
   @BlockUI() blockUI: NgBlockUI;
 
   public engagement: EngagementInterface[];
   public teams: TeamInterface[];
   public people: PeopleInterface[];
 
-  readonly vision: Signal<VisionInterface> = inject(VisionLocalStorageService).state.asReadonly();
-
   private visionLocalStorageService: VisionLocalStorageService = inject(VisionLocalStorageService);
   private peopleService: PeopleService = inject(PeopleService);
   private utilService: UtilService = inject(UtilService);
-  private transitionTime: number = 15000;
+  private transitionTime: number = environment.animations.transition_time;
+  private unsub: Subject<void> = new Subject<void>();
+  private engagementInterval: Subscription;
+  private peopleInterval: Subscription;
+  private teamInterval: Subscription;
+
+  readonly vision: Signal<VisionInterface> = inject(VisionLocalStorageService).state.asReadonly();
 
   ngOnInit(): void {
     this.loadPeople();
     this.toggleRotateTeams();
   }
 
+  ngOnDestroy() {
+    this.unsub.next();
+    this.unsub.complete();
+    this.engagementInterval.unsubscribe();
+    this.peopleInterval.unsubscribe();
+    this.teamInterval.unsubscribe();
+  }
+
   loadPeople(): void {
     this.blockUI.start();
     this.peopleService.listAll().pipe(map(item =>
       {
-        let transformedData
-        if(this.vision().vision === 'engagement')
-          transformedData = this.utilService.transformPeopleToEngament(item)
-        else if(this.vision().vision === 'team')
-          transformedData = this.utilService.transformPeopleToTeam(item)
-        else
-          transformedData = item
+        let transformedData;
+        switch (this.vision().vision) {
+          case "engagement":
+            transformedData = this.utilService.transformPeopleToEngament(item);
+            break;
+          case "team":
+            transformedData = this.utilService.transformPeopleToTeam(item);
+            break;
+          default:
+            transformedData = _.sortBy(item, function(item) { return item.start_date; }).reverse()
+        }
         return transformedData
-      }))
-      .subscribe((res: any) => {
+      })).subscribe((res: any) => {
       if (this.vision().vision === 'team') {
         this.teams = res;
       }
@@ -106,34 +121,45 @@ export class DashboardHomeComponent implements OnInit {
       if (this.vision().vision === 'people') {
         this.people = res;
       }
+      this.toggleRotateTeams();
     }).add(() => {
       setTimeout(() => {
         this.blockUI.stop()
       }, 2000)
     });
-
     this.visionLocalStorageService.updateValues(this.vision());
   }
 
   toggleRotateTeams(): void {
     if (this.vision().vision === 'team') {
-      interval(this.transitionTime).pipe(takeWhile(() => this.vision().vision === 'team' && this.vision().rotate_teams)).subscribe(() => {
-        this.teams.push(<TeamInterface>this.teams.shift());
-      });
+      if (!this.teamInterval || this.teamInterval.closed) {
+        this.teamInterval = interval(this.transitionTime).pipe(takeWhile(() => this.vision().vision === 'team' && this.vision().rotate_teams), takeUntil(this.unsub)).subscribe(() => {
+          this.teams.push(<TeamInterface>this.teams.shift());
+        });
+      }
+      this.peopleInterval ? this.peopleInterval.unsubscribe() : null;
+      this.engagementInterval ? this.engagementInterval.unsubscribe() : null;
     }
 
     if (this.vision().vision === 'engagement') {
-      interval(this.transitionTime).pipe(takeWhile(() => this.vision().vision === 'engagement' && this.vision().rotate_teams)).subscribe(() => {
-        this.engagement.push(<EngagementInterface>this.engagement.shift());
-      });
+      if (!this.engagementInterval || this.engagementInterval.closed) {
+        this.engagementInterval = interval(this.transitionTime).pipe(takeWhile(() => this.vision().vision === 'engagement' && this.vision().rotate_teams), takeUntil(this.unsub)).subscribe(() => {
+          this.engagement.push(<EngagementInterface>this.engagement.shift());
+        });
+      }
+      this.peopleInterval ? this.peopleInterval.unsubscribe() : null;
+      this.teamInterval ? this.teamInterval.unsubscribe() : null;
     }
 
     if (this.vision().vision === 'people') {
-      interval(this.transitionTime).pipe(takeWhile(() => this.vision().vision === 'people' && this.vision().rotate_teams)).subscribe(() => {
-        this.people.push(<PeopleInterface>this.people.shift());
-      });
+      if (!this.peopleInterval || this.peopleInterval.closed) {
+        this.peopleInterval = interval(this.transitionTime).pipe(takeWhile(() => this.vision().vision === 'people' && this.vision().rotate_teams), takeUntil(this.unsub)).subscribe(() => {
+          this.people.push(<PeopleInterface>this.people.shift());
+        });
+      }
+      this.teamInterval ? this.teamInterval.unsubscribe() : null;
+      this.engagementInterval ? this.engagementInterval.unsubscribe() : null;
     }
-
     this.visionLocalStorageService.updateValues(this.vision());
   }
 }
