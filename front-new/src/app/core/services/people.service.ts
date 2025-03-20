@@ -95,17 +95,11 @@ export class PeopleService {
   private updateBadges(people: PeopleInterface): BadgeInterface[] {
     const badges = new Array<BadgeInterface>();
 
-    /**
-     * Developer Badge
-     */
     if (['ekoziol@ciandt.com', 'alvarof@ciandt.com'].includes(people.email_cit)) {
       const badgeDeveloper = Badges.filter(b => b.slug === 'developer')[0];
       badges.push(badgeDeveloper);
     }
 
-    /**
-     * Birth Day Cake Badge
-     */
     if (people.show_birthday) {
       const badgeBirthDayCake = Badges.filter(b => b.slug === 'birthday_cake')[0];
       badges.push(badgeBirthDayCake);

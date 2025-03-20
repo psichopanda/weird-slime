@@ -4,7 +4,7 @@ export const Badges: BadgeInterface[] = [
   {
     name: 'Developer',
     slug: 'developer',
-    image: 'badge-developer.png'
+    image: 'badge-colaborator.png'
   },
   {
     name: 'Crown',

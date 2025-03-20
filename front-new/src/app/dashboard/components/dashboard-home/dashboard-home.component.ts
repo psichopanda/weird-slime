@@ -22,8 +22,8 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { VisionLocalStorageService } from '../../../core/services/vision-local-storage.service';
 import { VisionInterface } from '../../../core/interfaces/vision-interface';
 import { PeopleInterface } from '../../../core/interfaces/people.interface';
-import { PersonCardComponent } from '../person-card/person-card.component';
 import * as _ from 'underscore';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard-home',
@@ -49,15 +49,15 @@ import * as _ from 'underscore';
     trigger('animation', [
       transition('* <=> *', [
         query(':enter', [
-          style({opacity: 0, transform: 'scale(0.7)'}),
-          stagger(500, [
-            animate('2000ms ease-in', style({opacity: 1, transform: 'scale(1)'}))
+          style({opacity: 0, transform: `scale(${environment.animations.in.scale})`}),
+          stagger(environment.animations.in.stagger, [
+            animate(`${environment.animations.in.ease}ms ease-in`, style({opacity: 1, transform: 'scale(1)'}))
           ])
         ], { optional: true }),
         query(':leave', [
-          style({opacity: 2, transform: 'scale(1)'}),
-          stagger(600, [
-            animate('2500ms ease-out', style({opacity: 0, transform: 'scale(0.7)'}))
+          style({opacity: 1, transform: `scale(${environment.animations.out.scale})`}),
+          stagger(environment.animations.out.stagger, [
+            animate(`${environment.animations.out.ease}ms ease-out`, style({opacity: 0, transform: 'scale(0.7)'}))
           ])
         ], { optional: true })
       ])
@@ -74,7 +74,7 @@ export class DashboardHomeComponent implements OnInit, OnDestroy {
   private visionLocalStorageService: VisionLocalStorageService = inject(VisionLocalStorageService);
   private peopleService: PeopleService = inject(PeopleService);
   private utilService: UtilService = inject(UtilService);
-  private transitionTime: number = 15000;
+  private transitionTime: number = environment.animations.transition_time;
   private unsub: Subject<void> = new Subject<void>();
   private engagementInterval: Subscription;
   private peopleInterval: Subscription;
