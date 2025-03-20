@@ -16,5 +16,6 @@ export const environment = {
       stagger: 200,
       ease: 400
     }
-  }
+  },
+  developers: ['ekoziol@ciandt.com', 'alvarof@ciandt.com']
 };
